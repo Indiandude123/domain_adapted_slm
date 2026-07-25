@@ -8,12 +8,21 @@ from transformers import AutoModelForSequenceClassification, BitsAndBytesConfig
 DEFAULT_TARGET_MODULES = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
 
-def load_quantized_classifier(model_name: str, num_labels: int) -> AutoModelForSequenceClassification:
+def load_quantized_classifier(
+    model_name: str, num_labels: int, compute_dtype: torch.dtype = torch.float16
+) -> AutoModelForSequenceClassification:
+    """Load a 4-bit quantized sequence classifier.
+
+    `compute_dtype` defaults to fp16, not bf16: on Turing GPUs (T4 — Kaggle's free-tier
+    accelerator) bf16 isn't tensor-core accelerated and fell back to a path ~30x slower in
+    practice (450s/step instead of the expected low single digits). bf16 only pays off on
+    Ampere+ (A100, RTX 30xx and later).
+    """
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
         bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=compute_dtype,
     )
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,

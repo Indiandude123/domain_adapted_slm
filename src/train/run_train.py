@@ -77,7 +77,7 @@ def main() -> None:
         gradient_accumulation_steps=cfg.get("grad_accum_steps", 4),
         num_train_epochs=cfg.get("epochs", 3),
         learning_rate=cfg.get("learning_rate", 2e-4),
-        bf16=True,
+        fp16=True,
         gradient_checkpointing=True,
         logging_steps=20,
         eval_strategy="epoch",
