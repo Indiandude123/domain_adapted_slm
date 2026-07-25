@@ -53,7 +53,12 @@ def main() -> None:
     y_train = np.array(dataset["train"]["label"])
     y_test = np.array(dataset["test"]["label"])
 
-    vectorizer = TfidfVectorizer(max_features=args.max_features, ngram_range=(1, 2), sublinear_tf=True)
+    vectorizer = TfidfVectorizer(
+        max_features=args.max_features,
+        ngram_range=(1, 2),
+        sublinear_tf=True,
+        stop_words="english",
+    )
     X_train = vectorizer.fit_transform(dataset["train"]["text"])
     X_test = vectorizer.transform(dataset["test"]["text"])
 

@@ -1,4 +1,4 @@
-"""Tokenization and class-imbalance utilities for SCOTUS classification.
+"""Text cleaning, tokenization, and class-imbalance utilities for SCOTUS classification.
 
 SCOTUS opinions frequently exceed the model's context window; we truncate to the first
 `max_length` tokens rather than chunking or summarizing (documented limitation, not solved
@@ -6,9 +6,31 @@ in the initial version of this project).
 """
 from __future__ import annotations
 
+import re
+
 import numpy as np
 import torch
 from transformers import PreTrainedTokenizerBase
+
+# ~10% of SCOTUS train docs contain this OCR/scan placeholder where the original page of
+# oral-argument transcript wasn't digitized. It carries no classification signal and just
+# eats into the truncation budget, so it's stripped rather than left in.
+_OMITTED_ARGUMENT_RE = re.compile(r"\[.*?intentionally omitted\]", re.IGNORECASE | re.DOTALL)
+_INLINE_WHITESPACE_RE = re.compile(r"[ \t]+")
+_EXCESS_BLANK_LINES_RE = re.compile(r"\n{3,}")
+
+
+def clean_text(text: str) -> str:
+    """Strip scanning artifacts and normalize whitespace in raw SCOTUS opinion text.
+
+    Deliberately conservative: the citation/attorney front matter is left in place since its
+    extent isn't reliably detectable across the dataset's document eras/formats, and cutting
+    it with a fragile heuristic risks losing real content in edge cases.
+    """
+    text = _OMITTED_ARGUMENT_RE.sub(" ", text)
+    text = _INLINE_WHITESPACE_RE.sub(" ", text)
+    text = _EXCESS_BLANK_LINES_RE.sub("\n\n", text)
+    return text.strip()
 
 
 def tokenize_batch(examples: dict, tokenizer: PreTrainedTokenizerBase, max_length: int = 2048) -> dict:

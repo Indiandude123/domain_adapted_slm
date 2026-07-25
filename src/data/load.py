@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from datasets import DatasetDict, load_dataset
 
+from src.data.preprocess import clean_text
+
 DATASET_NAME = "coastalcph/lex_glue"
 DATASET_CONFIG = "scotus"
 
@@ -26,8 +28,10 @@ SCOTUS_LABELS = [
 
 
 def load_scotus() -> DatasetDict:
-    """Load train/validation/test splits for the SCOTUS subtask of LexGLUE."""
-    return load_dataset(DATASET_NAME, DATASET_CONFIG)
+    """Load train/validation/test splits for the SCOTUS subtask of LexGLUE, with basic
+    text cleaning applied (see `src.data.preprocess.clean_text`)."""
+    dataset = load_dataset(DATASET_NAME, DATASET_CONFIG)
+    return dataset.map(lambda ex: {"text": clean_text(ex["text"])})
 
 
 def label_names() -> list[str]:
