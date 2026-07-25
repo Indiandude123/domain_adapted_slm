@@ -5,6 +5,7 @@ peft>=0.12
 bitsandbytes>=0.43
 accelerate>=0.33
 scikit-learn>=1.4
+xgboost>=2.0
 pandas>=2.2
 numpy>=1.26
 pyyaml>=6.0

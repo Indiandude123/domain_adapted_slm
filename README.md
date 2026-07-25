@@ -35,11 +35,11 @@ imbalanced. Ships as a 4-bit quantized model behind a FastAPI inference endpoint
 ## Repo layout
 
 ```
-notebooks/         EDA and the Kaggle training notebook
+notebooks/         baseline, EDA, and the Kaggle training notebook
 src/data/           dataset loading, tokenization, class-weight/sampler utilities
 src/model/          QLoRA model construction (4-bit base + LoRA)
 src/train/          weighted-loss Trainer subclass + training CLI
-src/eval/           imbalance-aware metrics + inference benchmarking
+src/eval/           classical baselines, imbalance-aware metrics, inference benchmarking
 src/api/            FastAPI inference service
 configs/            training hyperparameters (YAML)
 tests/              API smoke tests (stubbed model, no GPU/download needed)
@@ -47,15 +47,20 @@ tests/              API smoke tests (stubbed model, no GPU/download needed)
 
 ## Running it
 
-Training runs on Kaggle Notebooks (see
-[notebooks/02_train_qlora.ipynb](notebooks/02_train_qlora.ipynb) for accelerator/internet
-settings and setup). Locally:
+Baselines and QLoRA training both run on Kaggle Notebooks (see
+[notebooks/00_baseline.ipynb](notebooks/00_baseline.ipynb) — CPU only — and
+[notebooks/02_train_qlora.ipynb](notebooks/02_train_qlora.ipynb) — GPU — for accelerator/
+internet settings and setup). Locally:
 
 ```bash
 pip install -r requirements.txt
 
 # EDA
 jupyter notebook notebooks/01_eda.ipynb
+
+# Classical baselines (TF-IDF + LogReg/RandomForest/XGBoost) — CPU, but slow on a laptop;
+# prefer running this on Kaggle via notebooks/00_baseline.ipynb
+python -m src.eval.baseline
 
 # Training (needs a CUDA GPU)
 python -m src.train.run_train --config configs/scotus_phi3.yaml --weighted
@@ -71,11 +76,13 @@ pytest tests/
 
 ## Results
 
-_TBD — filled in after training runs complete on Kaggle._
+_TBD — filled in after the baseline and training runs complete on Kaggle._
 
 | Model                          | Accuracy | Macro-F1 | Weighted-F1 |
 |---------------------------------|----------|----------|-------------|
-| Baseline (TF-IDF + LogReg)       |          |          |             |
+| Baseline: TF-IDF + Logistic Regression |    |          |             |
+| Baseline: TF-IDF + Random Forest |          |          |             |
+| Baseline: TF-IDF + XGBoost       |          |          |             |
 | QLoRA, unweighted loss           |          |          |             |
 | QLoRA, class-weighted loss        |          |          |             |
 
