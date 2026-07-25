@@ -1,0 +1,15 @@
+Domain-Adapted Small Language Model (SLM)
+
+Previous Identity: End-to-End NLP Pipeline for Legal Case Classification (BERT)
+Strategic Shift: Pivot from standard BERT fine-tuning to Parameter-Efficient Fine-Tuning
+(PEFT) using an open-weights SLM. This highlights modern techniques for edge
+computing and constrained deployments.
+
+Recommended Resume Bullets:
+Fine-tuned an open-weights language model using QLoRA (Parameter-Efficient Fine-Tuning) to
+classify complex, highly imbalanced legal case texts.
+Implemented 4-bit quantization to drastically reduce memory footprint and optimize inference
+throughput, achieving a highly efficient footprint suitable for constrained deployments.
+Engineered an end-to-end data processing and inference API using FastAPI, resolving severe
+class imbalance through specialized sampling strategies.
+Keywords to Highlight: QLoRA, PEFT, 4-bit Quantization, SLM, Llama-3/Phi, Imbalanced Learning.

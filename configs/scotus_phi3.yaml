@@ -1,0 +1,15 @@
+model_name: microsoft/Phi-3-mini-4k-instruct
+max_length: 2048
+
+batch_size: 4
+eval_batch_size: 8
+grad_accum_steps: 4
+epochs: 3
+learning_rate: 2.0e-4
+
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+
+output_dir: outputs
+report_to: none
