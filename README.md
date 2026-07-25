@@ -105,3 +105,8 @@ rare ones. This is the bar the QLoRA runs need to clear.
   chunked or summarized — long documents lose information past the truncation point.
 - Single base model evaluated (Phi-3-mini-4k-instruct); Llama-3.1-8B-Instruct is a documented
   stretch goal if more GPU headroom is available.
+- **Kaggle GPU must be T4, not P100**: `bitsandbytes` 4-bit quantization requires CUDA compute
+  capability ≥7.0 (Turing+). The P100 is Pascal (sm_60) and fails with a CUDA kernel symbol
+  error on any 4-bit op. `enable_gpu: true` alone doesn't guarantee a T4 — the Kaggle API's
+  `machine_shape` field (`--accelerator NvidiaTeslaT4` on `kaggle kernels push`) must be set
+  explicitly, or T4 x2 selected manually in notebook settings.
