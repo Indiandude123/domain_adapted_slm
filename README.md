@@ -1,6 +1,6 @@
 # Domain-Adapted SLM for Legal Case Classification
 
-QLoRA fine-tuning of an open-weights small language model (Phi-3-mini-4k-instruct, 3.8B) to
+QLoRA fine-tuning of an open-weights small language model (Qwen2.5-1.5B-Instruct) to
 classify U.S. Supreme Court opinions by issue area — 14 classes, single-label, meaningfully
 imbalanced. Ships as a 4-bit quantized model behind a FastAPI inference endpoint.
 
@@ -63,7 +63,7 @@ jupyter notebook notebooks/01_eda.ipynb
 python -m src.eval.baseline
 
 # Training (needs a CUDA GPU)
-python -m src.train.run_train --config configs/scotus_phi3.yaml --weighted
+python -m src.train.run_train --config configs/scotus_qwen2.5.yaml --weighted
 
 # Serve the trained adapter
 MODEL_PATH=outputs/weighted/final uvicorn src.api.main:app --reload
@@ -101,10 +101,13 @@ rare ones. This is the bar the QLoRA runs need to clear.
 
 ## Known limitations
 
-- SCOTUS opinions are truncated to the model's context window (first N tokens) rather than
-  chunked or summarized — long documents lose information past the truncation point.
-- Single base model evaluated (Phi-3-mini-4k-instruct); Llama-3.1-8B-Instruct is a documented
-  stretch goal if more GPU headroom is available.
+- SCOTUS opinions are truncated to `max_length` (2048 tokens) rather than chunked or
+  summarized — long documents lose information past the truncation point.
+- Single base model evaluated (Qwen2.5-1.5B-Instruct), chosen over the originally-planned
+  Phi-3-mini-4k-instruct (3.8B) after Phi-3-mini proved too slow to train to completion
+  within Kaggle's GPU session time limit even after fixing an OOM and a bf16/T4 compute-dtype
+  mismatch — Qwen2.5-1.5B has under half the parameters and trains meaningfully faster.
+  Llama-3.1-8B-Instruct remains a documented stretch goal if more GPU headroom is available.
 - **Kaggle GPU must be T4, not P100**: `bitsandbytes` 4-bit quantization requires CUDA compute
   capability ≥7.0 (Turing+). The P100 is Pascal (sm_60) and fails with a CUDA kernel symbol
   error on any 4-bit op. `enable_gpu: true` alone doesn't guarantee a T4 — the Kaggle API's

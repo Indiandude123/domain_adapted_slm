@@ -1,9 +1,9 @@
 """CLI entrypoint for QLoRA training, invoked from the Kaggle notebook.
 
 Usage:
-    python -m src.train.run_train --config configs/scotus_phi3.yaml
-    python -m src.train.run_train --config configs/scotus_phi3.yaml --weighted
-    python -m src.train.run_train --config configs/scotus_phi3.yaml --weighted --push-to-hub <user>/<repo>
+    python -m src.train.run_train --config configs/scotus_qwen2.5.yaml
+    python -m src.train.run_train --config configs/scotus_qwen2.5.yaml --weighted
+    python -m src.train.run_train --config configs/scotus_qwen2.5.yaml --weighted --push-to-hub <user>/<repo>
 """
 from __future__ import annotations
 

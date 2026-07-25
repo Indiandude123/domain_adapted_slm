@@ -15,7 +15,7 @@ from src.data.load import label_names
 from src.model.qlora import load_quantized_classifier
 
 MODEL_PATH = os.environ.get("MODEL_PATH", "outputs/weighted/final")
-BASE_MODEL_NAME = os.environ.get("BASE_MODEL_NAME", "microsoft/Phi-3-mini-4k-instruct")
+BASE_MODEL_NAME = os.environ.get("BASE_MODEL_NAME", "Qwen/Qwen2.5-1.5B-Instruct")
 MAX_LENGTH = int(os.environ.get("MAX_LENGTH", "2048"))
 
 LABELS = label_names()
