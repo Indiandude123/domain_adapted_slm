@@ -4,9 +4,6 @@ QLoRA fine-tuning of an open-weights small language model (Phi-3-mini-4k-instruc
 classify U.S. Supreme Court opinions by issue area — 14 classes, single-label, meaningfully
 imbalanced. Ships as a 4-bit quantized model behind a FastAPI inference endpoint.
 
-Pivoted from an earlier "BERT fine-tuning" framing to a modern PEFT/quantization workflow;
-see [project_idea.txt](project_idea.txt) for the original scope notes.
-
 ## Problem
 
 - **Dataset**: [LexGLUE](https://huggingface.co/datasets/coastalcph/lex_glue) — SCOTUS subtask.
