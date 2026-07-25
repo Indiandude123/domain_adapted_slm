@@ -76,15 +76,23 @@ pytest tests/
 
 ## Results
 
-_TBD — filled in after the baseline and training runs complete on Kaggle._
+Baselines run on Kaggle (CPU kernel, [notebooks/00_baseline.ipynb](notebooks/00_baseline.ipynb),
+~23 min): [kaggle.com/code/anamitrasingha/scotus-tf-idf-baselines](https://www.kaggle.com/code/anamitrasingha/scotus-tf-idf-baselines).
+QLoRA rows are still TBD — pending the GPU training runs.
 
 | Model                          | Accuracy | Macro-F1 | Weighted-F1 |
 |---------------------------------|----------|----------|-------------|
-| Baseline: TF-IDF + Logistic Regression |    |          |             |
-| Baseline: TF-IDF + Random Forest |          |          |             |
-| Baseline: TF-IDF + XGBoost       |          |          |             |
+| Baseline: TF-IDF + Logistic Regression | 0.716 | 0.600 | 0.710 |
+| Baseline: TF-IDF + Random Forest | 0.652 | 0.462 | 0.617 |
+| Baseline: TF-IDF + XGBoost       | 0.684 | 0.560 | 0.675 |
 | QLoRA, unweighted loss           |          |          |             |
 | QLoRA, class-weighted loss        |          |          |             |
+
+Logistic Regression is the strongest baseline despite being the simplest model — not unusual
+on sparse, high-dimensional TF-IDF features where linear models tend to generalize better than
+tree ensembles. The macro-F1 gap vs. accuracy (0.600 vs. 0.716 for LogReg) reflects the class
+imbalance: accuracy is inflated by the frequent classes, macro-F1 penalizes poor performance on
+rare ones. This is the bar the QLoRA runs need to clear.
 
 | Metric                         | fp16 baseline | 4-bit quantized |
 |----------------------------------|---------------|------------------|
